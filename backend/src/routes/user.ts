@@ -3,16 +3,14 @@ import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import setPrisma from "../middleware/setPrisma";
 import { signinSchema, signupSchema } from "@yashaswashukla/blog-post";
+import { PrismaClient } from "@prisma/client/edge";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
+  Variables: { prisma: PrismaClient };
 }>();
 
 router.use("/*", setPrisma);
-const getHashed = async (password: string) => {
-  const hashed = await bcrypt.hash(password, 8);
-  return hashed;
-};
 
 //Signup route
 router.post("/signup", async (c) => {
@@ -23,7 +21,7 @@ router.post("/signup", async (c) => {
     c.status(403);
     return c.json({ message: "Invalid input" });
   }
-  const password = await getHashed(body.password);
+  const password = bcrypt.hashSync(body.password, 8);
   try {
     const currUser = await prisma.user.create({
       data: {
@@ -32,7 +30,6 @@ router.post("/signup", async (c) => {
         password: password,
       },
     });
-    console.log(currUser);
     const token = await sign({ id: currUser.id }, c.env.JWT_SECRET);
     c.status(200);
     return c.json({ token });
@@ -52,21 +49,24 @@ router.post("/signin", async (c) => {
     c.status(403);
     return c.json({ message: "Invalid Inputs" });
   }
-  const password = await getHashed(body.password);
   try {
     const currUser = await prisma.user.findUnique({
-      where: { email: body.email, password: password },
+      where: { email: body.email },
     });
 
     if (!currUser) {
       c.status(403);
       return c.json({ message: "Invalid credentials" });
     }
+    const validPass = await bcrypt.compare(body.password, currUser.password);
+    if (!validPass) {
+      c.status(403);
+      return c.json({ message: "Invalid Credentials" });
+    }
     const token = await sign({ id: currUser.id }, c.env.JWT_SECRET);
     c.status(200);
     return c.json({ token });
   } catch (error) {
-    console.log(error);
     c.status(403);
     return c.json({ message: "An error Occured" });
   }

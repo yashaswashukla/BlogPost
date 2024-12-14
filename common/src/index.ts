@@ -18,6 +18,7 @@ const updateSchema = zod.object({
   id: zod.string(),
   title: zod.string(),
   content: zod.string(),
+  published: zod.boolean().optional(),
 });
 
 // Type inferencing:

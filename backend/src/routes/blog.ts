@@ -2,10 +2,11 @@ import { Hono } from "hono";
 import authMiddleware from "../middleware/authMiddleware";
 import setPrisma from "../middleware/setPrisma";
 import { updateSchema, insertSchema } from "@yashaswashukla/blog-post";
+import { PrismaClient } from "@prisma/client/edge";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
-  Variable: { userId: string };
+  Variables: { userId: string; prisma: PrismaClient };
 }>();
 
 router.use("/*", authMiddleware);
@@ -29,11 +30,9 @@ router.post("/", async (c) => {
         content: body.content,
       },
     });
-    console.log(post);
     c.status(200);
     return c.json({ message: "Blog posted" });
   } catch (error) {
-    console.log(error);
     return c.json({ message: "An error occurred" });
   }
 });
@@ -57,13 +56,15 @@ router.put("/", async (c) => {
     }
     const updatedPost = await prisma.blog.update({
       where: { id: body.id },
-      data: { title: body.title, content: body.content },
+      data: {
+        title: body.title,
+        content: body.content,
+        published: body.published,
+      },
     });
-    console.log(updatedPost);
     c.status(200);
     return c.json({ message: "Update Successful" });
   } catch (error) {
-    console.error(error);
     c.status(401);
     return c.json({ message: "An error Occured" });
   }
@@ -104,7 +105,6 @@ router.get("/:id", async (c) => {
     c.status(200);
     return c.json(currBlog);
   } catch (error) {
-    console.log(error);
     c.status(403);
     return c.json({ message: "An Error occurred" });
   }
