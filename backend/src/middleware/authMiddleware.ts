@@ -20,7 +20,7 @@ const authMiddleware = createMiddleware(async (c, next) => {
   } catch (error) {
     console.log(error);
     c.status(401);
-    c.json({ message: "An error Occurred" });
+    return c.json({ message: "You are not logged in!" });
   }
 });
 
