@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import setPrisma from "../middleware/setPrisma";
-import zod from "zod";
+import { signinSchema, signupSchema } from "@yashaswashukla/blog-post";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
@@ -14,14 +14,7 @@ const getHashed = async (password: string) => {
   return hashed;
 };
 
-const signupSchema = zod.object({
-  email: zod.string().email(),
-  name: zod.string().max(15),
-  password: zod.string().min(6),
-});
-
 //Signup route
-
 router.post("/signup", async (c) => {
   const prisma = c.get("prisma");
   const body = await c.req.json();
@@ -50,10 +43,6 @@ router.post("/signup", async (c) => {
 });
 
 //Signin Route
-const signinSchema = zod.object({
-  email: zod.string().email(),
-  password: zod.string().min(6),
-});
 
 router.post("/signin", async (c) => {
   const prisma = c.get("prisma");

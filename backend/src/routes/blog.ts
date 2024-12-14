@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import authMiddleware from "../middleware/authMiddleware";
 import setPrisma from "../middleware/setPrisma";
-import zod from "zod";
+import { updateSchema, insertSchema } from "@yashaswashukla/blog-post";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
@@ -12,12 +12,6 @@ router.use("/*", authMiddleware);
 router.use("/*", setPrisma);
 
 // Creating a blog
-const insertSchema = zod.object({
-  authorId: zod.string(),
-  title: zod.string().min(5),
-  content: zod.string(),
-});
-
 router.post("/", async (c) => {
   const prisma = c.get("prisma");
   const currUser = c.get("userId");
@@ -45,12 +39,6 @@ router.post("/", async (c) => {
 });
 
 //Updating a blog
-const updateSchema = zod.object({
-  id: zod.string(),
-  title: zod.string(),
-  content: zod.string(),
-});
-
 router.put("/", async (c) => {
   const prisma = c.get("prisma");
   const body = await c.req.json();
