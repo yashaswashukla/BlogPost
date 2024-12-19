@@ -20,7 +20,7 @@ router.post("/", async (c) => {
   const { success } = insertSchema.safeParse(body);
   if (!success) {
     c.status(403);
-    return c.json({ message: "Invalid Inputs" });
+    return c.json({ message: "Hi, Invalid Inputs" });
   }
   try {
     const post = await prisma.blog.create({
@@ -31,7 +31,7 @@ router.post("/", async (c) => {
       },
     });
     c.status(200);
-    return c.json({ message: "Blog posted" });
+    return c.json({ id: post.id });
   } catch (error) {
     return c.json({ message: "An error occurred" });
   }
@@ -70,6 +70,32 @@ router.put("/", async (c) => {
   }
 });
 
+router.get("/myblogs", async (c) => {
+  const prisma = c.get("prisma");
+  const userId = c.get("userId");
+
+  try {
+    const allBlogs = await prisma.blog.findMany({
+      where: {
+        authorId: userId,
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        author: {
+          select: { name: true },
+        },
+      },
+    });
+    c.status(200);
+    return c.json(allBlogs);
+  } catch (error) {
+    c.status(403);
+    return c.json({ message: "An Error Occured" });
+  }
+});
+
 //Get all the post
 router.get("/bulk", async (c) => {
   const prisma = c.get("prisma");
@@ -78,6 +104,15 @@ router.get("/bulk", async (c) => {
   const skip = (page - 1) * pageSize;
   try {
     const allBlogs = await prisma.blog.findMany({
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        published: true,
+        author: {
+          select: { name: true },
+        },
+      },
       skip,
       take: pageSize,
     });
@@ -97,6 +132,15 @@ router.get("/:id", async (c) => {
   try {
     const currBlog = await prisma.blog.findUnique({
       where: { id: blogId },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        published: true,
+        author: {
+          select: { name: true },
+        },
+      },
     });
     if (!currBlog) {
       c.status(403);

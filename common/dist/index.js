@@ -7,7 +7,7 @@ exports.signupSchema = exports.signinSchema = exports.insertSchema = exports.upd
 const zod_1 = __importDefault(require("zod"));
 const signupSchema = zod_1.default.object({
     email: zod_1.default.string().email(),
-    name: zod_1.default.string().max(15),
+    name: zod_1.default.string(),
     password: zod_1.default.string().min(6),
 });
 exports.signupSchema = signupSchema;
@@ -17,7 +17,6 @@ const signinSchema = zod_1.default.object({
 });
 exports.signinSchema = signinSchema;
 const insertSchema = zod_1.default.object({
-    authorId: zod_1.default.string(),
     title: zod_1.default.string().min(5),
     content: zod_1.default.string(),
 });
@@ -26,5 +25,6 @@ const updateSchema = zod_1.default.object({
     id: zod_1.default.string(),
     title: zod_1.default.string(),
     content: zod_1.default.string(),
+    published: zod_1.default.boolean().optional(),
 });
 exports.updateSchema = updateSchema;

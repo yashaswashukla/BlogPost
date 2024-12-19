@@ -7,7 +7,7 @@ import { PrismaClient } from "@prisma/client/edge";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
-  Variables: { prisma: PrismaClient };
+  Variables: { prisma: PrismaClient; userId: string };
 }>();
 
 router.use("/*", setPrisma);
@@ -32,7 +32,12 @@ router.post("/signup", async (c) => {
     });
     const token = await sign({ id: currUser.id }, c.env.JWT_SECRET);
     c.status(200);
-    return c.json({ token });
+    return c.json({
+      token,
+      id: currUser.id,
+      name: currUser.name,
+      email: currUser.email,
+    });
   } catch (error) {
     c.status(403);
     return c.json({ message: "An Error Occurred" });
@@ -65,7 +70,12 @@ router.post("/signin", async (c) => {
     }
     const token = await sign({ id: currUser.id }, c.env.JWT_SECRET);
     c.status(200);
-    return c.json({ token });
+    return c.json({
+      token,
+      id: currUser.id,
+      name: currUser.name,
+      email: currUser.email,
+    });
   } catch (error) {
     c.status(403);
     return c.json({ message: "An error Occured" });

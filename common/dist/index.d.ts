@@ -23,15 +23,12 @@ declare const signinSchema: zod.ZodObject<{
     password: string;
 }>;
 declare const insertSchema: zod.ZodObject<{
-    authorId: zod.ZodString;
     title: zod.ZodString;
     content: zod.ZodString;
 }, "strip", zod.ZodTypeAny, {
-    authorId: string;
     title: string;
     content: string;
 }, {
-    authorId: string;
     title: string;
     content: string;
 }>;
@@ -39,14 +36,17 @@ declare const updateSchema: zod.ZodObject<{
     id: zod.ZodString;
     title: zod.ZodString;
     content: zod.ZodString;
+    published: zod.ZodOptional<zod.ZodBoolean>;
 }, "strip", zod.ZodTypeAny, {
     title: string;
     content: string;
     id: string;
+    published?: boolean | undefined;
 }, {
     title: string;
     content: string;
     id: string;
+    published?: boolean | undefined;
 }>;
 type signupInput = zod.infer<typeof signupSchema>;
 type signinInput = zod.infer<typeof signinSchema>;
