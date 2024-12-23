@@ -18,8 +18,8 @@ router.post("/signup", async (c) => {
   const body = await c.req.json();
   const { success } = signupSchema.safeParse(body);
   if (!success) {
-    c.status(403);
-    return c.json({ message: "Invalid input" });
+    c.status(400);
+    return c.json({ message: "Bad Request, Invalid input" });
   }
   const password = bcrypt.hashSync(body.password, 8);
   try {
@@ -39,7 +39,7 @@ router.post("/signup", async (c) => {
       email: currUser.email,
     });
   } catch (error) {
-    c.status(403);
+    c.status(500);
     return c.json({ message: "An Error Occurred" });
   }
 });
@@ -51,8 +51,8 @@ router.post("/signin", async (c) => {
   const body = await c.req.json();
   const { success } = signinSchema.safeParse(body);
   if (!success) {
-    c.status(403);
-    return c.json({ message: "Invalid Inputs" });
+    c.status(400);
+    return c.json({ message: "Bad Request, Invalid Inputs" });
   }
   try {
     const currUser = await prisma.user.findUnique({
@@ -60,12 +60,12 @@ router.post("/signin", async (c) => {
     });
 
     if (!currUser) {
-      c.status(403);
-      return c.json({ message: "Invalid credentials" });
+      c.status(401);
+      return c.json({ message: "Bad Request, Invalid credentials" });
     }
     const validPass = await bcrypt.compare(body.password, currUser.password);
     if (!validPass) {
-      c.status(403);
+      c.status(401);
       return c.json({ message: "Invalid Credentials" });
     }
     const token = await sign({ id: currUser.id }, c.env.JWT_SECRET);
@@ -77,7 +77,7 @@ router.post("/signin", async (c) => {
       email: currUser.email,
     });
   } catch (error) {
-    c.status(403);
+    c.status(500);
     return c.json({ message: "An error Occured" });
   }
 });

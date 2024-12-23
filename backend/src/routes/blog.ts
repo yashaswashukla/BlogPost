@@ -19,8 +19,8 @@ router.post("/", async (c) => {
   const body = await c.req.json();
   const { success } = insertSchema.safeParse(body);
   if (!success) {
-    c.status(403);
-    return c.json({ message: "Hi, Invalid Inputs" });
+    c.status(400);
+    return c.json({ message: "Bad Request, Invalid Inputs" });
   }
   try {
     const post = await prisma.blog.create({
@@ -33,6 +33,7 @@ router.post("/", async (c) => {
     c.status(200);
     return c.json({ id: post.id });
   } catch (error) {
+    c.status(500);
     return c.json({ message: "An error occurred" });
   }
 });
@@ -43,18 +44,18 @@ router.put("/", async (c) => {
   const body = await c.req.json();
   const { success } = updateSchema.safeParse(body);
   if (!success) {
-    c.status(403);
-    return c.json({ message: "Invalid Inputs" });
+    c.status(400);
+    return c.json({ message: "Bad Request, Invalid Inputs" });
   }
   try {
     const isAvailable = await prisma.blog.findUnique({
       where: { id: body.id },
     });
     if (!isAvailable) {
-      c.status(403);
+      c.status(400);
       return c.json({ message: "Blog not available" });
     }
-    const updatedPost = await prisma.blog.update({
+    await prisma.blog.update({
       where: { id: body.id },
       data: {
         title: body.title,
@@ -65,7 +66,7 @@ router.put("/", async (c) => {
     c.status(200);
     return c.json({ message: "Update Successful" });
   } catch (error) {
-    c.status(401);
+    c.status(500);
     return c.json({ message: "An error Occured" });
   }
 });
@@ -91,7 +92,7 @@ router.get("/myblogs", async (c) => {
     c.status(200);
     return c.json(allBlogs);
   } catch (error) {
-    c.status(403);
+    c.status(500);
     return c.json({ message: "An Error Occured" });
   }
 });
@@ -119,7 +120,7 @@ router.get("/bulk", async (c) => {
     c.status(200);
     return c.json(allBlogs);
   } catch (error) {
-    c.status(401);
+    c.status(500);
     return c.json({ message: "An Error Occured" });
   }
 });
@@ -143,13 +144,13 @@ router.get("/:id", async (c) => {
       },
     });
     if (!currBlog) {
-      c.status(403);
+      c.status(400);
       return c.json({ message: "Blog not found" });
     }
     c.status(200);
     return c.json(currBlog);
   } catch (error) {
-    c.status(403);
+    c.status(500);
     return c.json({ message: "An Error occurred" });
   }
 });
