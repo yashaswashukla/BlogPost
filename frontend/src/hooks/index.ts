@@ -18,7 +18,9 @@ export const useBlogs = () => {
     try {
       axios
         .get(`${BACKEND_URL}/api/v1/blog/bulk`, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token") || "",
+          },
         })
         .then((response) => {
           setBlogs(response.data);
@@ -37,7 +39,9 @@ export const useBlog = ({ id }: { id: string }) => {
     try {
       axios
         .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token") || "",
+          },
         })
         .then((response) => {
           setBlog(response.data);
@@ -48,7 +52,7 @@ export const useBlog = ({ id }: { id: string }) => {
   return { loading, blog };
 };
 
-export const useMyBlog = () => {
+export const useMyBlogs = () => {
   const [loading, setLoading] = useState(false);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   useEffect(() => {
@@ -56,7 +60,9 @@ export const useMyBlog = () => {
       setLoading(true);
       axios
         .get(`${BACKEND_URL}/api/v1/blog/myblogs`, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token") || "",
+          },
         })
         .then((response) => {
           setBlogs(response.data);
@@ -65,4 +71,39 @@ export const useMyBlog = () => {
     } catch (error) {}
   }, []);
   return { loading, blogs };
+};
+
+export const useUser = () => {
+  const token = localStorage.getItem("token") || "";
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    try {
+      axios
+        .get(`${BACKEND_URL}/api/v1/user/check`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setLoggedIn(true);
+          }
+        });
+    } catch (error) {}
+  });
+  return loggedIn;
+};
+
+const heightAdjust = (curr: HTMLTextAreaElement | null) => {
+  if (curr) {
+    curr.style.height = "auto";
+    curr.style.height = `${curr.scrollHeight}px`;
+  }
+};
+
+export const useDynamicTextArea = (
+  curr: HTMLTextAreaElement | null,
+  value: string
+) => {
+  useEffect(() => {
+    heightAdjust(curr);
+  }, [value]);
 };

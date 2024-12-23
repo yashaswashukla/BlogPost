@@ -1,24 +1,37 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppBar from "../components/AppBar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import PublishSkeleton from "../skeletons/PublishSkeleton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useBlog, useDynamicTextArea } from "../hooks";
+import FullBlogSkeleton from "../skeletons/FullBlogSkeleton";
 
-function Publish() {
+function UpdateBlog() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const titleBox = useRef<HTMLTextAreaElement>(null);
+  const contentBox = useRef<HTMLTextAreaElement>(null);
+  const [sendLoading, setSendLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const titleBox = useRef(null);
-  const contentBox = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { blog, loading } = useBlog({ id: id || "" });
 
-  const sendData = async () => {
+  useDynamicTextArea(titleBox.current, title);
+  useDynamicTextArea(contentBox.current, content);
+
+  useEffect(() => {
+    setTitle(blog?.title || "");
+    setContent(blog?.content || "");
+  }, [blog]);
+
+  const updateData = async () => {
     try {
-      setLoading(true);
-      const response = await axios.post(
+      setSendLoading(true);
+      await axios.put(
         `${BACKEND_URL}/api/v1/blog`,
         {
+          id,
           title,
           content,
         },
@@ -26,13 +39,22 @@ function Publish() {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         }
       );
-      setLoading(false);
-      navigate(`/blog/${response.data.id}`);
+      setSendLoading(false);
+      navigate(`/blog/${id}`);
     } catch (error) {}
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-screen-2xl px-40">
+        <FullBlogSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <AppBar sendData={sendData} publish={true} label="Publish" />
+      <AppBar sendData={updateData} publish={true} label="Update" />
       <div className="mt-40 ml-44 mr-52">
         <div className="flex divide-x-2 divide-slate-200">
           <div className="flex flex-col justify-center mr-2">
@@ -54,11 +76,9 @@ function Publish() {
           <textarea
             ref={titleBox}
             rows={1}
+            value={title}
             onChange={(e) => {
               setTitle(e.target.value);
-              const curr = titleBox.current;
-              curr.style.height = "auto";
-              curr.style.height = `${curr.scrollHeight}px`;
             }}
             placeholder="Title"
             className="w-full resize-none focus:outline-none placeholder:text-5xl placeholder:font-extralight pt-2 pl-2 text-slate-500 text-5xl overflow:hidden"
@@ -66,19 +86,17 @@ function Publish() {
         </div>
         <textarea
           ref={contentBox}
+          value={content}
           onChange={(e) => {
             setContent(e.target.value);
-            const curr = contentBox.current;
-            curr.style.height = "auto";
-            curr.style.height = `${curr.scrollHeight}px`;
           }}
           placeholder="Enter your story here..."
           className="w-full resize-none focus:outline-none h-screen placeholder:text-xl placeholder:font-extralight text-xl resize:none mt-10 ml-14"
         />
       </div>
-      {loading && <PublishSkeleton />}
+      {sendLoading && <PublishSkeleton />}
     </div>
   );
 }
 
-export default Publish;
+export default UpdateBlog;

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import setPrisma from "../middleware/setPrisma";
 import { signinSchema, signupSchema } from "@yashaswashukla/blog-post";
 import { PrismaClient } from "@prisma/client/edge";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router = new Hono<{
   Bindings: { DATABASE_URL: string; JWT_SECRET: string };
@@ -80,6 +81,12 @@ router.post("/signin", async (c) => {
     c.status(500);
     return c.json({ message: "An error Occured" });
   }
+});
+
+// Check if logged in or not
+router.get("/check", authMiddleware, (c) => {
+  c.status(200);
+  return c.json({ message: "Logged In" });
 });
 
 export default router;

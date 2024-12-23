@@ -1,10 +1,10 @@
 import AppBar from "../components/AppBar";
 import BlogCard from "../components/BlogCard";
-import { useMyBlog } from "../hooks";
+import { useMyBlogs } from "../hooks";
 import TextSkeleton from "../skeletons/CardSkeleton";
 
 function MyBlogs() {
-  const { loading, blogs } = useMyBlog();
+  const { loading, blogs } = useMyBlogs();
   const getMultipleSkeletons = () => {
     const list = [];
     for (let i = 0; i < 5; i++) list.push(<TextSkeleton />);
@@ -37,6 +37,7 @@ function MyBlogs() {
                   title={ele.title}
                   content={ele.content}
                   publishedDate=""
+                  update={true}
                 />
               </div>
             );

@@ -14,6 +14,7 @@ function SignInAuth() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const sendRequest = async () => {
@@ -23,6 +24,9 @@ function SignInAuth() {
         `${BACKEND_URL}/api/v1/user/signin`,
         postInputs
       );
+      if (response.status != 200) {
+        throw new Error();
+      }
       const token = response.data.token;
       localStorage.setItem("token", token);
       localStorage.setItem("id", response.data.id);
@@ -32,7 +36,7 @@ function SignInAuth() {
       navigate("/blogs");
     } catch (error) {
       setLoading(false);
-      alert("An Error occured");
+      setError(true);
     }
   };
 
@@ -41,6 +45,13 @@ function SignInAuth() {
       <div className="flex justify-center">
         <div className="grid grid-cols-1">
           <AuthHeader type="signin" />
+          {error && (
+            <div className="flex justify-center mt-3">
+              <div className="text-red-500 text-lg font-bold">
+                Incorrect Email or Password
+              </div>
+            </div>
+          )}
 
           <InputBox
             label="Email"

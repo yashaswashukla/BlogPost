@@ -16,6 +16,7 @@ function SignUpAuth() {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const sendRequest = async () => {
     try {
       setLoading(true);
@@ -23,16 +24,20 @@ function SignUpAuth() {
         `${BACKEND_URL}/api/v1/user/signup`,
         postInputs
       );
-      const jwt = response.data.token;
-      localStorage.setItem("token", jwt);
-      localStorage.setItem("id", response.data.id);
-      localStorage.setItem("name", response.data.name);
-      localStorage.setItem("email", response.data.email);
-      setLoading(false);
-      navigate("/blogs");
+      if (response.status === 200) {
+        const jwt = response.data.token;
+        localStorage.setItem("token", jwt);
+        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("name", response.data.name);
+        localStorage.setItem("email", response.data.email);
+        setLoading(false);
+        navigate("/blogs");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      setError(true);
     }
   };
 
@@ -41,7 +46,13 @@ function SignUpAuth() {
       <div className="flex justify-center">
         <div className="grid grid-cols-1">
           <AuthHeader type="signup" />
-
+          {error && (
+            <div className="flex justify-center mt-3">
+              <div className="text-red-500 text-lg font-bold">
+                Invalid Inputs!
+              </div>
+            </div>
+          )}
           <InputBox
             label="Email"
             placeholder="johnDoe@xyz.com"

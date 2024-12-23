@@ -5,7 +5,7 @@ function Avatar({ initial, size }: { initial: string; size: string }) {
         size === "big" ? "w-12 h-12" : "w-6 h-6"
       } ${
         size === "big"
-          ? "hover:bg-slate-900 transition ease-in-out delay-300 hover:scale-110"
+          ? "hover:bg-slate-900 transition ease-in-out duration-300 hover:scale-110"
           : ""
       }`}
     >
