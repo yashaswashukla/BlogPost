@@ -18,8 +18,8 @@ function AppBar({
   const [menu, setMenu] = useState(false);
 
   return (
-    <div>
-      <div className="fixed top-0 left-0 w-full border-b border-slate-200  px-20 py-2 bg-white z-10 flex justify-between">
+    <div className="z-20">
+      <div className="fixed top-0 left-0 w-full border-b border-slate-200  px-20 py-2 bg-white z-20 flex justify-between">
         <Link to={"/blogs"}>
           <div className="flex flex-col justify-center font-semibold text-2xl cursor-pointer h-full transition ease-in-out duration-300 hover:scale-110 focus:scale-90">
             Medium
@@ -52,7 +52,7 @@ function AppBar({
           </button>
         </div>
       </div>
-      <div className="fixed top-20 right-10 z-40">
+      <div className={`fixed top-20 right-10 z-10`}>
         <DropMenu menu={menu} />
       </div>
     </div>

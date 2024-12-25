@@ -4,9 +4,9 @@ function DropMenu({ menu }: { menu: boolean }) {
   const navigate = useNavigate();
   return (
     <div
-      className={`w-full z-10 bg-white border border-gray-100 divide-y divide-gray-300 rounded-lg shadow w-44 transition-transform ${
-        menu ? "animate-slideInFromTop" : "animate-slideOutToTop"
-      }`}
+      className={`w-full bg-white border border-gray-100 divide-y divide-gray-300 rounded-lg shadow transition-transform duration-300 ${
+        menu ? "translate-y-0" : "-translate-y-96"
+      } `}
     >
       <div className="px-4 py-3 text-sm text-gray-900 text-center grid grid-cols-1">
         <div className="font-bold">{localStorage.getItem("name")}</div>
