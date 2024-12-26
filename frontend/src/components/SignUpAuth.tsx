@@ -78,7 +78,7 @@ function SignUpAuth() {
           />
           <button
             onClick={sendRequest}
-            className="transition ease-in-out delay-300 hover:scale-110 focus:scale-90 w-full bg-black rounded-md text-center text-white py-1.5 mt-6 hover:bg-gray-900"
+            className="transition ease-in-out hover:scale-110 w-full bg-black rounded-md text-center text-white py-1.5 mt-6 hover:bg-gray-900"
           >
             {loading == true ? (
               <PulseLoader color="#ffffff" size={8} />

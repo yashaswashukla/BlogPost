@@ -70,7 +70,7 @@ function SignInAuth() {
           />
           <button
             onClick={sendRequest}
-            className="w-full bg-black rounded-md text-center text-white py-1.5 mt-6 hover:bg-slate-900 transition ease-in-out delay-300 hover:scale-110 focus:scale-90"
+            className="w-full bg-black rounded-md text-center text-white py-1.5 mt-6 hover:bg-slate-900 transition ease-in-out hover:scale-110"
           >
             {loading == true ? (
               <PulseLoader color="#ffffff" size={8} />
