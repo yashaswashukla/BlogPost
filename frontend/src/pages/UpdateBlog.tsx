@@ -6,6 +6,7 @@ import PublishSkeleton from "../skeletons/PublishSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBlog, useDynamicTextArea } from "../hooks";
 import FullBlogSkeleton from "../skeletons/FullBlogSkeleton";
+import Tiptap from "../components/TipTap";
 
 function UpdateBlog() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function UpdateBlog() {
       );
       setSendLoading(false);
       navigate(`/blog/${id}`);
-    } catch (error) {}
+    } catch (err) {}
   };
 
   if (loading) {
@@ -73,6 +74,7 @@ function UpdateBlog() {
               />
             </svg>
           </div>
+          <Tiptap />
           <textarea
             ref={titleBox}
             rows={1}

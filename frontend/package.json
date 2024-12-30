@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tiptap/pm": "^2.11.0",
+    "@tiptap/react": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
     "@yashaswashukla/blog-post": "^1.1.4",
     "axios": "^1.7.9",
     "react": "^18.3.1",

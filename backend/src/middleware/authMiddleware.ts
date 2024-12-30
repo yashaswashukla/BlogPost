@@ -7,9 +7,9 @@ const authMiddleware = createMiddleware(async (c, next) => {
     c.status(401);
     return c.json({ message: "Invalid Access" });
   }
-  const token = authHeader.split(" ")[1];
 
   try {
+    const token = authHeader.split(" ")[1];
     const payload = await verify(token, c.env.JWT_SECRET);
     if (!payload) {
       c.status(401);
