@@ -83,12 +83,15 @@ export const useAuth = () => {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
-        if (response.status === 200) {
-          setLoggedIn(true);
-          setLoading(false);
+        if (response.status !== 200) {
+          throw new Error();
         }
+        setLoggedIn(true);
+        setLoading(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
   return { loggedIn, loading };
 };
