@@ -1,12 +1,8 @@
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import { Check, Trash } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  PopoverContent,
-  Popover,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "../../ui/button";
+import { PopoverContent, Popover, PopoverTrigger } from "../../ui/popover";
 import { Editor } from "@tiptap/core";
 
 export function isValidUrl(url: string) {

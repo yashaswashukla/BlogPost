@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import {
   BoldIcon,
   ItalicIcon,
@@ -7,7 +7,7 @@ import {
   CodeIcon,
 } from "lucide-react";
 import type { SelectorItem } from "./node-selector";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 import { Editor } from "@tiptap/core";
 interface propType {
   editor: Editor;

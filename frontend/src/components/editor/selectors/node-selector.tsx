@@ -13,8 +13,8 @@ import {
 import { Editor } from "@tiptap/core";
 
 import { Popover } from "@radix-ui/react-popover";
-import { PopoverContent, PopoverTrigger } from "@/components//ui/popover";
-import { Button } from "@/components//ui/button";
+import { PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { Button } from "../../ui/button";
 
 export type SelectorItem = {
   name: string;
