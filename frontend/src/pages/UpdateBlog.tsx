@@ -74,7 +74,6 @@ function UpdateBlog() {
               />
             </svg>
           </div>
-          <Tiptap />
           <textarea
             ref={titleBox}
             rows={1}
@@ -85,6 +84,9 @@ function UpdateBlog() {
             placeholder="Title"
             className="w-full resize-none focus:outline-none placeholder:text-5xl placeholder:font-extralight pt-2 pl-2 text-slate-500 text-5xl overflow:hidden"
           />
+        </div>
+        <div className="m-10">
+          <Tiptap />
         </div>
         <textarea
           ref={contentBox}
