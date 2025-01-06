@@ -1,32 +1,64 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "../components/AppBar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import PublishSkeleton from "../skeletons/PublishSkeleton";
 import { useNavigate, useParams } from "react-router-dom";
-import { useBlog, useDynamicTextArea } from "../hooks";
+import { useBlog } from "../hooks";
 import FullBlogSkeleton from "../skeletons/FullBlogSkeleton";
-import Tiptap from "../components/TipTap";
+
+//Editor Imports
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import {
+  contentExtensions,
+  titleExtentions,
+} from "../components/editor/extensions";
+import SideMenu from "../components/editor/SideMenu";
+import { Separator } from "../components/ui/separator";
+import { NodeSelector } from "../components/editor/selectors/node-selector";
+import { LinkSelector } from "../components/editor/selectors/link-selector";
+import { TextButtons } from "../components/editor/selectors/text-button";
+import { TableOperations } from "../components/editor/selectors/table-operation";
+import "../components/editor/Editor.css";
 
 function UpdateBlog() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const titleBox = useRef<HTMLTextAreaElement>(null);
-  const contentBox = useRef<HTMLTextAreaElement>(null);
   const [sendLoading, setSendLoading] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+
   const { blog, loading } = useBlog({ id: id || "" });
 
-  useDynamicTextArea(titleBox.current, title);
-  useDynamicTextArea(contentBox.current, content);
+  const [openNode, setOpenNode] = useState(false);
+  const [openLink, setOpenLink] = useState(false);
 
   useEffect(() => {
-    setTitle(blog?.title || "");
-    setContent(blog?.content || "");
+    titleEditor?.commands.setContent("<h1>" + blog?.title || "" + "</h1>");
+    contentEditor?.commands.setContent(blog?.content || "");
   }, [blog]);
 
+  const titleEditor = useEditor({
+    extensions: titleExtentions,
+    editorProps: {
+      attributes: {
+        class: "prose prose-2xl focus:outline-none px-5 py-2",
+      },
+    },
+  });
+  const contentEditor = useEditor({
+    extensions: contentExtensions,
+    editorProps: {
+      attributes: {
+        class: "prose prose-2xl focus:outline-none px-5 py-2",
+      },
+    },
+  });
+  if (!contentEditor || !titleEditor) {
+    return <FullBlogSkeleton />;
+  }
+
   const updateData = async () => {
+    const title = titleEditor.getHTML();
+    const content = contentEditor.getHTML();
     try {
       setSendLoading(true);
       await axios.put(
@@ -42,7 +74,9 @@ function UpdateBlog() {
       );
       setSendLoading(false);
       navigate(`/blog/${id}`);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (loading) {
@@ -56,47 +90,49 @@ function UpdateBlog() {
   return (
     <div>
       <AppBar sendData={updateData} publish={true} label="Update" />
-      <div className="mt-40 ml-44 mr-52">
-        <div className="flex divide-x-2 divide-slate-200">
-          <div className="flex flex-col justify-center mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="0.5"
-              stroke="currentColor"
-              className="size-12 stroke-slate-500 hover:stroke-cyan-500"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
+      <div className="mt-32 px-32 grid grid-cols-1">
+        <div className="grid grid-cols-12 gap-2">
+          <div className="col-span-2 flex flex-col gap-y-5 items-center">
+            <SideMenu editor={contentEditor} />
           </div>
-          <textarea
-            ref={titleBox}
-            rows={1}
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            placeholder="Title"
-            className="w-full resize-none focus:outline-none placeholder:text-5xl placeholder:font-extralight pt-2 pl-2 text-slate-500 text-5xl overflow:hidden"
-          />
+          <div className="col-span-10 ">
+            <div>
+              <EditorContent editor={titleEditor} />
+            </div>
+            <div>
+              <EditorContent editor={contentEditor} />
+
+              <BubbleMenu
+                editor={contentEditor}
+                className={`flex w-fit max-w-[90vw] border border-gray-100 bg-background shadow-xl`}
+              >
+                <Separator orientation="vertical" />
+                {contentEditor.isActive("table") ? (
+                  <TableOperations
+                    open={openNode}
+                    onOpenChange={setOpenNode}
+                    editor={contentEditor}
+                  />
+                ) : (
+                  <NodeSelector
+                    open={openNode}
+                    onOpenChange={setOpenNode}
+                    editor={contentEditor}
+                  />
+                )}
+                <Separator orientation="vertical" />
+                <LinkSelector
+                  open={openLink}
+                  onOpenChange={setOpenLink}
+                  editor={contentEditor}
+                />
+                <Separator orientation="vertical" />
+                <TextButtons editor={contentEditor} />
+                <Separator orientation="vertical" />
+              </BubbleMenu>
+            </div>
+          </div>
         </div>
-        <div className="m-10">
-          <Tiptap />
-        </div>
-        <textarea
-          ref={contentBox}
-          value={content}
-          onChange={(e) => {
-            setContent(e.target.value);
-          }}
-          placeholder="Enter your story here..."
-          className="w-full resize-none focus:outline-none h-screen placeholder:text-xl placeholder:font-extralight text-xl resize:none mt-10 ml-14"
-        />
       </div>
       {sendLoading && <PublishSkeleton />}
     </div>
