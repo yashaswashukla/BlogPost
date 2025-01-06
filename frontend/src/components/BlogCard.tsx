@@ -1,5 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
+import "../components/editor/Editor.css";
+import parse from "html-react-parser";
+
 interface BlogCardProps {
   id: string;
   authorName: string;
@@ -8,6 +11,7 @@ interface BlogCardProps {
   publishedDate: string;
   update?: boolean;
 }
+
 function BlogCard({
   id,
   authorName,
@@ -30,9 +34,9 @@ function BlogCard({
             • {publishedDate}
           </div>
         </div>
-        <div className="text-2xl font-bold mt-4">{title}</div>
-        <div className="mt-2 text-md text-slate-600 mb-8">
-          {content.slice(0, 250) + "....."}
+        <div className="text-2xl font-bold mt-4  truncate">{parse(title)}</div>
+        <div className="mt-2 text-md text-slate-600 mb-6 line-clamp-3">
+          {parse(content)}
         </div>
       </Link>
       <div className="flex gap-x-4">

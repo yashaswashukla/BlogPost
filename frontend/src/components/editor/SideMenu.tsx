@@ -87,7 +87,7 @@ function SideMenu({ editor }: propType) {
   if (!editor) return <div>Hi from the side menu</div>;
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <div className="mt-20 flex justify-center">
           <CirclePlus
             size={40}
