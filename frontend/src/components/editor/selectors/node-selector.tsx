@@ -5,10 +5,9 @@ import {
   ListOrdered,
   TextIcon,
   Code,
-  CheckSquare,
-  type LucideIcon,
   Heading1,
   List,
+  type LucideIcon,
 } from "lucide-react";
 import { Editor } from "@tiptap/core";
 
@@ -43,13 +42,6 @@ const items: SelectorItem[] = [
     command: (editor) =>
       editor.chain().focus().clearNodes().toggleHeading({ level: 3 }).run(),
     isActive: (editor) => editor.isActive("heading", { level: 3 }),
-  },
-  {
-    name: "To-do List",
-    icon: CheckSquare,
-    command: (editor) =>
-      editor.chain().focus().clearNodes().toggleTaskList().run(),
-    isActive: (editor) => editor.isActive("taskItem"),
   },
   {
     name: "Bullet List",

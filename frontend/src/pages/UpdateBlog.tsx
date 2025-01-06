@@ -32,7 +32,7 @@ function UpdateBlog() {
   const [openLink, setOpenLink] = useState(false);
 
   useEffect(() => {
-    titleEditor?.commands.setContent("<h1>" + blog?.title || "" + "</h1>");
+    titleEditor?.commands.setContent(blog?.title || "");
     contentEditor?.commands.setContent(blog?.content || "");
   }, [blog]);
 

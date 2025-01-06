@@ -6,6 +6,7 @@ import Avatar from "../components/Avatar";
 import AppBar from "../components/AppBar";
 import "../components/editor/Editor.css";
 import parse from "html-react-parser";
+import "../components/editor/Editor.css";
 
 function FullBlog() {
   const { id } = useParams();
@@ -27,11 +28,15 @@ function FullBlog() {
         <AppBar />
         <div className="grid grid-cols-12 mt-32">
           <div className="col-span-8 mt-10 px-40">
-            <div className="text-5xl font-bold">{parse(blog?.title || "")}</div>
+            <div className="text-5xl font-bold tiptap">
+              {parse(blog?.title || "")}
+            </div>
             <div className="text-lg text-slate-600 mt-5">
               posted on 3 Dec, 2024
             </div>
-            <div className="text-xl mt-8">{parse(blog?.content || "")}</div>
+            <div className="text-xl mt-8 tiptap">
+              {parse(blog?.content || "")}
+            </div>
           </div>
           <div className="col-span-4">
             <div className="mt-20 px-28">

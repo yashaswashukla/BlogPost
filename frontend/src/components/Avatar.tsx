@@ -13,7 +13,7 @@ function Avatar({ initial, size }: { initial: string; size: string }) {
         <div
           className={`flex flex-col justify-center ${
             size === "small" ? "text-xs font-semibold" : "text-xl font-bold"
-          }  text-gray-600 dark:text-gray-200`}
+          }  text-gray-200`}
         >
           {initial}
         </div>

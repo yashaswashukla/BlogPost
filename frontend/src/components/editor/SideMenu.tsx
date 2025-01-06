@@ -1,6 +1,5 @@
 import { Editor } from "@tiptap/core";
 import {
-  CheckSquare,
   CirclePlus,
   Code,
   Heading1,
@@ -37,13 +36,6 @@ const items: SelectorItem[] = [
     command: (editor) =>
       editor.chain().focus().clearNodes().toggleHeading({ level: 3 }).run(),
     isActive: (editor) => editor.isActive("heading", { level: 3 }),
-  },
-  {
-    name: "To-do List",
-    icon: CheckSquare,
-    command: (editor) =>
-      editor.chain().focus().clearNodes().toggleTaskList().run(),
-    isActive: (editor) => editor.isActive("taskItem"),
   },
   {
     name: "Bullet List",
@@ -90,7 +82,7 @@ function SideMenu({ editor }: propType) {
       <PopoverTrigger>
         <div className="mt-20 flex justify-center">
           <CirclePlus
-            size={40}
+            size={50}
             strokeWidth={1}
             color="#22c55e"
             className={`transition-transform duration-150 ease-in-out ${
