@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import {
   contentExtensions,
-  titleExtentions,
+  titleExtensions,
 } from "../components/editor/extensions";
 import SideMenu from "../components/editor/SideMenu";
 import { Separator } from "../components/ui/separator";
@@ -19,8 +19,6 @@ import { TextButtons } from "../components/editor/selectors/text-button";
 import { TableOperations } from "../components/editor/selectors/table-operation";
 import "../components/editor/Editor.css";
 
-const startingTitle = `<h1> Enter your Title here. </h1>`;
-const startingContent = `<p><i> Enter your Story here. </i></p>`;
 function Publish() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -29,8 +27,7 @@ function Publish() {
   const [openLink, setOpenLink] = useState(false);
 
   const titleEditor = useEditor({
-    content: startingTitle,
-    extensions: titleExtentions,
+    extensions: titleExtensions,
     editorProps: {
       attributes: {
         class: "prose prose-2xl focus:outline-none px-5 py-2",
@@ -38,7 +35,6 @@ function Publish() {
     },
   });
   const contentEditor = useEditor({
-    content: startingContent,
     extensions: contentExtensions,
     editorProps: {
       attributes: {
@@ -76,48 +72,44 @@ function Publish() {
   return (
     <div>
       <AppBar sendData={sendData} publish={true} label="Publish" />
-      <div className="mt-32 px-32 grid grid-cols-1">
-        <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-2 flex flex-col gap-y-5 items-center">
-            <SideMenu editor={contentEditor} />
-          </div>
-          <div className="col-span-10 ">
-            <div>
-              <EditorContent editor={titleEditor} />
-            </div>
-            <div>
-              <EditorContent editor={contentEditor} />
+      <div className="mt-32 px-32">
+        <div className="fixed top-44">
+          <SideMenu editor={contentEditor} />
+        </div>
+        <div className="ml-28  border-l border-gray-200">
+          <EditorContent editor={titleEditor} />
+          <div className="">
+            <EditorContent editor={contentEditor} />
 
-              <BubbleMenu
-                editor={contentEditor}
-                className={`flex w-fit max-w-[90vw] border border-gray-100 bg-background shadow-xl`}
-              >
-                {/* <PopUpMenu editor={editor} /> */}
-                <Separator orientation="vertical" />
-                {contentEditor.isActive("table") ? (
-                  <TableOperations
-                    open={openNode}
-                    onOpenChange={setOpenNode}
-                    editor={contentEditor}
-                  />
-                ) : (
-                  <NodeSelector
-                    open={openNode}
-                    onOpenChange={setOpenNode}
-                    editor={contentEditor}
-                  />
-                )}
-                <Separator orientation="vertical" />
-                <LinkSelector
-                  open={openLink}
-                  onOpenChange={setOpenLink}
+            <BubbleMenu
+              editor={contentEditor}
+              className={`flex w-fit max-w-[90vw] border border-gray-100 bg-background shadow-xl`}
+            >
+              {/* <PopUpMenu editor={editor} /> */}
+              <Separator orientation="vertical" />
+              {contentEditor.isActive("table") ? (
+                <TableOperations
+                  open={openNode}
+                  onOpenChange={setOpenNode}
                   editor={contentEditor}
                 />
-                <Separator orientation="vertical" />
-                <TextButtons editor={contentEditor} />
-                <Separator orientation="vertical" />
-              </BubbleMenu>
-            </div>
+              ) : (
+                <NodeSelector
+                  open={openNode}
+                  onOpenChange={setOpenNode}
+                  editor={contentEditor}
+                />
+              )}
+              <Separator orientation="vertical" />
+              <LinkSelector
+                open={openLink}
+                onOpenChange={setOpenLink}
+                editor={contentEditor}
+              />
+              <Separator orientation="vertical" />
+              <TextButtons editor={contentEditor} />
+              <Separator orientation="vertical" />
+            </BubbleMenu>
           </div>
         </div>
       </div>

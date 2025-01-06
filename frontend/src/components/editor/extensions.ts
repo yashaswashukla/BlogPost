@@ -16,8 +16,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import Link from "@tiptap/extension-link";
 import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
+import Placeholder from "@tiptap/extension-placeholder";
 
 import { all, createLowlight } from "lowlight";
 
@@ -45,15 +44,27 @@ const contentExtensions = [
   TableHeader,
   TableCell,
   Link,
+  Placeholder.configure({
+    placeholder: "Enter your Story...",
+  }),
 ];
+const CustomDocument = Document.extend({
+  content: "heading block*",
+});
+const titleExtensions = [
+  CustomDocument,
+  StarterKit.configure({
+    document: false,
+  }),
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") {
+        return "What’s the title?";
+      }
 
-const titleExtentions = [
-  Document,
-  Paragraph,
-  Text,
-  Heading.configure({
-    levels: [1],
+      return "Can you add some further context?";
+    },
   }),
 ];
 
-export { contentExtensions, titleExtentions };
+export { contentExtensions, titleExtensions };
