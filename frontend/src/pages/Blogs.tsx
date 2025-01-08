@@ -22,9 +22,9 @@ function Blogs() {
     );
   }
   return (
-    <div>
+    <div className="grid grid-cols-1 gap-y-20">
       <AppBar />
-      <div className="flex justify-center mt-20">
+      <div className="flex justify-center">
         <div className="flex-col justify-center">
           {blogs.map((ele) => {
             return (
@@ -39,13 +39,6 @@ function Blogs() {
               </div>
             );
           })}
-          <BlogCard
-            id={"12121212121"}
-            authorName="Peter V"
-            title="What is lorem Ipsum"
-            content="ishal Mega Mart IPO Allotment: The initial public offering (IPO) of hypermarket chain operator Vishal Mega Mart Ltd received strong response from investors. After the end of bidding period, Vishal Mega Mart IPO allotment status is also in the public domain.Vishal Mega Mart Limited has finalised the basis of share allotment and in the wake of the ‘T+3’ listing rule, the public issue must be listed within three days after the end of subscription period.As Vishal Mega Mart IPO allotment status is out, the company will credit the shares into the demat accounts of eligible allottees and initiate refunds to unsuccessful bidders on Tuesday as Vishal Mega Mart IPO listing date is most likely on Wednesday, December 18, 2024."
-            publishedDate=""
-          />
         </div>
       </div>
     </div>

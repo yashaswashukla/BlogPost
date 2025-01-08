@@ -22,7 +22,7 @@ function BlogCard({
 }: BlogCardProps) {
   const navigate = useNavigate();
   return (
-    <div className="max-w-screen-lg border-b-1 border-b border-slate-300 px-2 pt-2 pb-5 ">
+    <div className="max-w-screen-lg border-b-1 border-b border-zinc-300 px-2 pt-2 pb-5 ">
       <Link to={`/blog/${id}`} className="hover:cursor-pointer">
         <div className="flex gap-x-2">
           <div className="flex flex-col justify-center">
@@ -30,17 +30,17 @@ function BlogCard({
           </div>
 
           <div className="text-sm">{authorName} </div>
-          <div className="text-sm font-light text-slate-600">
+          <div className="text-sm font-light text-zinc-600">
             • {publishedDate}
           </div>
         </div>
         <div className="text-2xl font-bold mt-4  truncate">{parse(title)}</div>
-        <div className="mt-2 text-md text-slate-600 mb-6 line-clamp-3">
+        <div className="mt-2 text-md text-zinc-600 mb-6 line-clamp-3">
           {parse(content)}
         </div>
       </Link>
       <div className="flex gap-x-4">
-        <div className="flex flex-col justify-center text-sm text-slate-700 bg-slate-200 rounded-lg px-2 py-0.5">{`${Math.ceil(
+        <div className="flex flex-col justify-center text-sm text-zinc-700 bg-zinc-200 rounded-lg px-2 py-0.5">{`${Math.ceil(
           content.length / 250
         )} min read`}</div>
         {update && (
@@ -48,7 +48,7 @@ function BlogCard({
             onClick={() => {
               navigate(`/updateBlog/${id}`);
             }}
-            className="flex justify-center bg-slate-200 hover:bg-slate-300 rounded-lg px-3 py-1 transition ease-in-out duration-150 hover:scale-110 cursor-pointer"
+            className="flex justify-center bg-zinc-200 hover:bg-zinc-300 rounded-lg px-3 py-1 transition ease-in-out duration-150 hover:scale-110 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

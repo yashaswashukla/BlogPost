@@ -10,7 +10,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import { Toaster } from "./components/ui/toaster";
 function App() {
   return (
-    <>
+    <div>
       <Toaster />
       <BrowserRouter>
         <Routes>
@@ -26,7 +26,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

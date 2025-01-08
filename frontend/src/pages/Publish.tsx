@@ -70,15 +70,15 @@ function Publish() {
   };
 
   return (
-    <div>
+    <div className="grid grid-cols-1 gap-y-32 ">
       <AppBar sendData={sendData} publish={true} label="Publish" />
-      <div className="mt-32 px-32">
+      <div className="px-32 ">
         <div className="fixed top-44">
           <SideMenu editor={contentEditor} />
         </div>
         <div className="ml-28  border-l border-gray-200">
           <EditorContent editor={titleEditor} />
-          <div className="">
+          <div className="h-screen">
             <EditorContent editor={contentEditor} />
 
             <BubbleMenu
