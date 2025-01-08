@@ -10,14 +10,12 @@ import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { PulseLoader } from "react-spinners";
 import { useToast } from "../hooks/use-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { PasswordInput } from "./ui/password-input";
 
 export function SigninForm() {
   const { toast } = useToast();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [show, setShow] = useState(false);
-  const [type, setType] = useState("password");
   const [postInputs, setPostInputs] = useState<signinInput>({
     email: "",
     password: "",
@@ -43,6 +41,7 @@ export function SigninForm() {
         throw new Error();
       }
     } catch (err) {
+      console.log(err);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong",
@@ -89,29 +88,13 @@ export function SigninForm() {
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
-            <div className="grid grid-cols-12 items-center gap-x-2">
-              <div className="col-span-11">
-                <Input
-                  id="password"
-                  placeholder="••••••••"
-                  type={type}
-                  onChange={(e) =>
-                    setPostInputs({ ...postInputs, password: e.target.value })
-                  }
-                />
-              </div>
-              <button
-                className="col-span-1"
-                type="button"
-                onClick={() => {
-                  setShow(!show);
-                  if (type === "password") setType("text");
-                  else setType("password");
-                }}
-              >
-                {show ? <Eye /> : <EyeOff />}
-              </button>
-            </div>
+            <PasswordInput
+              id="password"
+              placeholder="••••••••"
+              onChange={(e) => {
+                setPostInputs({ ...postInputs, password: e.target.value });
+              }}
+            />
           </LabelInputContainer>
 
           <button
