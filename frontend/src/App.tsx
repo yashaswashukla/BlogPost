@@ -7,23 +7,26 @@ import Publish from "./pages/Publish";
 import MyBlogs from "./pages/MyBlogs";
 import UpdateBlog from "./pages/UpdateBlog";
 import ProtectedRoute from "./utils/ProtectedRoute";
-
+import { Toaster } from "./components/ui/toaster";
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route element={<ProtectedRoute />}>
-          <Route index element={<Blog />} />
-          <Route path="/blogs" element={<Blog />} />
-          <Route path="/publish" element={<Publish />} />
-          <Route path="/blog/:id" element={<FullBlog />} />
-          <Route path="/myblogs" element={<MyBlogs />} />
-          <Route path="/updateblog/:id" element={<UpdateBlog />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Toaster />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<Blog />} />
+            <Route path="/blogs" element={<Blog />} />
+            <Route path="/publish" element={<Publish />} />
+            <Route path="/blog/:id" element={<FullBlog />} />
+            <Route path="/myblogs" element={<MyBlogs />} />
+            <Route path="/updateblog/:id" element={<UpdateBlog />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

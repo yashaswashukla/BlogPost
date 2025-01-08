@@ -1,13 +1,10 @@
-import Quote from "../components/Quote";
-import SignUpAuth from "../components/SignUpAuth";
+import { SignupForm } from "../components/SignupForm";
 
 function Signup() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2">
-      <SignUpAuth />
-      <div className="hidden lg:block">
-        <Quote />
-      </div>
+    <div>
+      {/* <SignUpAuth /> */}
+      <SignupForm />
     </div>
   );
 }
